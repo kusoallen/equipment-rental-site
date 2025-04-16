@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import os
+from PIL import Image, ExifTags
 
 st.set_page_config(page_title="裝備租借展示", layout="wide")
 st.title("🛡️ 裝備租借展示系統")
@@ -10,8 +11,26 @@ sheet_url = "https://docs.google.com/spreadsheets/d/1VbqOaRt3lWAEJjg-QdGABBT2XdC
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(sheet_url)
-    return df
+    return pd.read_csv(sheet_url)
+
+def open_oriented_image(path):
+    try:
+        image = Image.open(path)
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation] == 'Orientation':
+                break
+        exif = image._getexif()
+        if exif is not None:
+            orientation_value = exif.get(orientation, None)
+            if orientation_value == 3:
+                image = image.rotate(180, expand=True)
+            elif orientation_value == 6:
+                image = image.rotate(270, expand=True)
+            elif orientation_value == 8:
+                image = image.rotate(90, expand=True)
+    except:
+        image = Image.open(path)
+    return image
 
 df = load_data()
 
@@ -35,7 +54,8 @@ for i, (_, row) in enumerate(df.iterrows()):
                 break
 
         if image_path:
-            st.image(image_path, use_container_width=True)
+            img = open_oriented_image(image_path)
+            st.image(img, use_container_width=True)
         else:
             st.warning(f"❗ 找不到圖片：{row['名稱']}.jpg/.JPG/.png")
 
@@ -46,6 +66,7 @@ for i, (_, row) in enumerate(df.iterrows()):
         尺寸 = row['尺寸'] if '尺寸' in row and pd.notna(row['尺寸']) else "—"
         st.markdown(f"📏 尺寸：{尺寸}")
         st.markdown(f"🔹 內容物：{row['內容物']}")
+        st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
 st.markdown("---")
 st.subheader("📝 我要預約租借")
