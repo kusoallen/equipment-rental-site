@@ -33,6 +33,7 @@ def open_oriented_image(path):
     return image
 
 df = load_data()
+df = df[df["名稱"].notna()]# ✅ 過濾掉空白名稱的資料列
 
 keyword = st.text_input("🔍 搜尋裝備名稱或內容物關鍵字").strip()
 if keyword:
