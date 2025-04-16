@@ -65,6 +65,15 @@ if image_url:
     st.image(image_url, use_container_width=True, caption=row["名稱"])
 else:
     st.warning(f"❗ 無圖片：{row['名稱']}")
+
+st.markdown(f"#### {row['名稱']}")
+st.markdown(f"📦 分類：{row['分類']}")
+st.markdown(f"💰 每日租金：${int(row['每日租金']) if pd.notna(row['每日租金']) else '—'}")
+st.markdown(f"💥 損壞賠償價：${int(row['原價']) if pd.notna(row['原價']) else '—'}")
+尺寸 = row["尺寸"] if "尺寸" in row and pd.notna(row["尺寸"]) else "—"
+st.markdown(f"📏 尺寸：{尺寸}")
+st.markdown(f"🔹 內容物：{row['內容物']}")
+
         st.markdown(f"#### {row['名稱']}")
         st.markdown(f"📦 分類：{row['分類']}")
         st.markdown(f"💰 每日租金：${int(row['每日租金']) if pd.notna(row['每日租金']) else '—'}")
