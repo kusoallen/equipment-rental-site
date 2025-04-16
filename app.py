@@ -1,58 +1,41 @@
 
 import streamlit as st
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup
 
+# 頁面設定
 st.set_page_config(page_title="裝備租借展示", layout="wide")
 st.title("🛡️ 裝備租借展示系統")
 
-sheet_url = "https://docs.google.com/spreadsheets/d/1VbqOaRt3lWAEJjg-QdGABBT2XdC6B_2ZuIsqrASGmio/export?format=csv"
+# Google Sheet CSV 連結
+sheet_url = "https://docs.google.com/spreadsheets/d/1VbqOaRt3lWAEJjg-QdGABBT2XdC6B_2ZuIsqrASGmio/export?format=csv&gid=0"
 
 @st.cache_data
 def load_data():
-    return pd.read_csv(sheet_url)
-
-@st.cache_data
-def get_drive_image_ids(folder_url):
-    file_ids = {}
-    html = requests.get(folder_url).text
-    soup = BeautifulSoup(html, 'html.parser')
-    for script in soup.find_all("script"):
-        if "window.viewerData" in script.text:
-            data_start = script.string.find('{')
-            data_text = script.string[data_start:]
-            try:
-                import json
-                viewer_data = json.loads(data_text.split("};")[0] + "}")
-                for item in viewer_data["docs"]:
-                    title = item.get("title")
-                    file_id = item.get("id")
-                    if title and file_id:
-                        name = title.rsplit(".", 1)[0]
-                        file_ids[name] = file_id
-            except Exception as e:
-                print("JSON parsing error:", e)
-            break
-    return file_ids
+    df = pd.read_csv(sheet_url)
+    return df
 
 df = load_data()
-image_ids = get_drive_image_ids("https://drive.google.com/drive/folders/12z1OG5vykinDStN_H8wGD5izxYBw40mW")
 
+# 建立名稱:圖片ID 對照表
+image_ids = dict(zip(df["名稱"], df["圖片 ID"]))
+
+# 🔍 搜尋
 keyword = st.text_input("🔍 搜尋裝備名稱或內容物關鍵字").strip()
 if keyword:
     df = df[df["名稱"].str.contains(keyword, case=False, na=False) | df["內容物"].str.contains(keyword, case=False, na=False)]
 
+# 📂 分類篩選
 categories = ["全部"] + sorted(df["分類"].dropna().unique().tolist())
 selected = st.radio("📂 類別篩選：", categories, horizontal=True)
 if selected != "全部":
     df = df[df["分類"] == selected]
 
+# 🧱 展示裝備卡片
 cols = st.columns(3)
 for i, (_, row) in enumerate(df.iterrows()):
     with cols[i % 3]:
         image_id = image_ids.get(row["名稱"], "")
-        image_url = f"https://drive.google.com/uc?id={image_id}" if image_id else ""
+        image_url = f"https://drive.google.com/uc?id={image_id}" if pd.notna(image_id) else ""
 
         if image_url:
             st.image(image_url, use_container_width=True, caption=row["名稱"])
@@ -67,6 +50,7 @@ for i, (_, row) in enumerate(df.iterrows()):
         st.markdown(f"📏 尺寸：{尺寸}")
         st.markdown(f"🔹 內容物：{row['內容物']}")
 
+# 📝 表單租借
 st.markdown("---")
 st.subheader("📝 我要預約租借")
 
