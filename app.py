@@ -45,8 +45,16 @@ if selected != "全部":
     df = df[df["分類"] == selected]
 
 cols = st.columns(3)
+
 for i, (_, row) in enumerate(df.iterrows()):
     with cols[i % 3]:
+        # 👉 每張卡片開始：加框線與底色
+        st.markdown(
+            '<div style="background-color:#1e1e1e;border:2px solid #555;border-radius:12px;padding:16px;margin-bottom:20px;">',
+            unsafe_allow_html=True
+        )
+
+        # ✅ 自動搜尋可用圖片副檔名
         image_path = None
         for ext in [".jpg", ".JPG", ".png"]:
             path = f"image/{row['名稱']}{ext}"
@@ -54,22 +62,29 @@ for i, (_, row) in enumerate(df.iterrows()):
                 image_path = path
                 break
 
+        # ✅ 顯示圖片（自動修正 EXIF 方向）
         if image_path:
             img = open_oriented_image(image_path)
             st.image(img, use_container_width=True)
         else:
             st.warning(f"❗ 找不到圖片：{row['名稱']}.jpg/.JPG/.png")
 
+        # ✅ 顯示裝備資料
         st.markdown(f"#### {row['名稱']}")
         st.markdown(f"📦 分類：{row['分類']}")
         st.markdown(f"💰 每日租金：${int(row['每日租金']) if pd.notna(row['每日租金']) else '—'}")
         st.markdown(f"💥 損壞賠償價：${int(row['原價']) if pd.notna(row['原價']) else '—'}")
+
         尺寸 = row['尺寸'] if '尺寸' in row and pd.notna(row['尺寸']) else "—"
         st.markdown(f"📏 尺寸：{尺寸}")
-        st.markdown(f"🔹 內容物：{row['內容物']}")
-        st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
-st.markdown("---")
+        st.markdown(f"🔹 內容物：{row['內容物']}")
+
+        # 👉 每張卡片結尾
+        st.markdown('</div>', unsafe_allow_html=True)
+
+
+
 st.subheader("📝 我要預約租借")
 
 with st.form("rental_form"):
