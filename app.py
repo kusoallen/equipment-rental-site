@@ -60,7 +60,11 @@ for i, (_, row) in enumerate(df.iterrows()):
     with cols[i % 3]:
         image_id = image_ids.get(row["名稱"], "")
         image_url = f"https://drive.google.com/uc?id={image_id}" if image_id else ""
-        st.image(image_url, use_container_width=True, caption=row["名稱"])
+        
+if image_url:
+    st.image(image_url, use_container_width=True, caption=row["名稱"])
+else:
+    st.warning(f"❗ 無圖片：{row['名稱']}")
         st.markdown(f"#### {row['名稱']}")
         st.markdown(f"📦 分類：{row['分類']}")
         st.markdown(f"💰 每日租金：${int(row['每日租金']) if pd.notna(row['每日租金']) else '—'}")
@@ -81,5 +85,3 @@ with st.form("rental_form"):
 
     if submit:
         st.success(f"感謝你，{name}！你已預約【{item}】，租借 {days} 天。後續會與你聯繫！")
-
-
