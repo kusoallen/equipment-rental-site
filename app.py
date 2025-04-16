@@ -8,7 +8,7 @@ st.set_page_config(page_title="裝備租借展示", layout="wide")
 st.title("🛡️ 裝備租借展示系統")
 
 # Google Sheet CSV 匯出連結
-sheet_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbq8dzRa9Q58u-KZfdgtqpWyH8MnYzsnOBQvJ3T0NDd1rDqj3tpU0L4v3_bj_C_DmMMImY_Mr4XrHv/pub?gid=0&single=true&output=csv"
+sheet_url = "https://docs.google.com/spreadsheets/d/1VbqOaRt3lWAEJjg-QdGABBT2XdC6B_2ZuIsqrASGmio/export?format=csv"
 
 @st.cache_data
 def load_data():
