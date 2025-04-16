@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>裝備租借展示</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>裝備租借展示</h1>
+    <nav>
+      <button onclick="filterItems('all')">全部</button>
+      <button onclick="filterItems('套裝')">套裝</button>
+      <button onclick="filterItems('配件')">配件</button>
+    </nav>
+  </header>
+
+  <main id="equipment-list">
+    <div class="card" data-category="套裝">
+      <img src="images/roman_set.jpg" alt="羅馬士兵套裝">
+      <h2>羅馬士兵套裝</h2>
+      <p>每日租金：<strong>$300</strong></p>
+      <p>損壞賠償價：<strong>$3000</strong></p>
+      <p class="note">包含：頭盔、盾牌、劍、鎧甲</p>
+    </div>
+
+    <div class="card" data-category="配件">
+      <img src="images/sword.jpg" alt="短劍">
+      <h2>短劍</h2>
+      <p>每日租金：<strong>$50</strong></p>
+      <p>損壞賠償價：<strong>$800</strong></p>
+      <p class="note">軟膠材質，安全輕便</p>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
