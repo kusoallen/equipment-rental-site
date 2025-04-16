@@ -3,9 +3,34 @@ import streamlit as st
 import pandas as pd
 import os
 from PIL import Image, ExifTags
+import base64
 
 st.set_page_config(page_title="裝備租借展示", layout="wide")
 st.title("🛡️ 裝備租借展示系統")
+
+def set_background(image_path):
+    with open(image_path, "rb") as f:
+        img_data = f.read()
+    encoded = base64.b64encode(img_data).decode()
+    st.markdown(
+        f"""
+        <style>
+        body {{
+            background-image: url("data:image/jpg;base64,{encoded}");
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }}
+        .stApp {{
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 1rem;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+set_background("image/background.jpg")  # ← 你的背景圖放這邊
+
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1VbqOaRt3lWAEJjg-QdGABBT2XdC6B_2ZuIsqrASGmio/export?format=csv&gid=0"
 
@@ -31,6 +56,10 @@ def open_oriented_image(path):
     except:
         image = Image.open(path)
     return image
+
+
+
+
 
 df = load_data()
 df = df[df["名稱"].notna()]# ✅ 過濾掉空白名稱的資料列
