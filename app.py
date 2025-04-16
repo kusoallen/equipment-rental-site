@@ -27,11 +27,17 @@ if selected != "全部":
 cols = st.columns(3)
 for i, (_, row) in enumerate(df.iterrows()):
     with cols[i % 3]:
-        image_path = f"image/{row['名稱']}.jpg"
-        if os.path.exists(image_path):
+        image_path = None
+        for ext in [".jpg", ".JPG", ".png"]:
+            path = f"image/{row['名稱']}{ext}"
+            if os.path.exists(path):
+                image_path = path
+                break
+
+        if image_path:
             st.image(image_path, use_container_width=True)
         else:
-            st.warning(f"❗ 找不到圖片：{row['名稱']}.jpg")
+            st.warning(f"❗ 找不到圖片：{row['名稱']}.jpg/.JPG/.png")
 
         st.markdown(f"#### {row['名稱']}")
         st.markdown(f"📦 分類：{row['分類']}")
