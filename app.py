@@ -6,7 +6,7 @@ from PIL import Image, ExifTags
 import base64
 
 st.set_page_config(page_title="裝備租借展示", layout="wide")
-st.title("🛡️ 裝備租借展示系統")
+st.title("Allen裝備租借展示")
 
 def set_background(image_path):
     with open(image_path, "rb") as f:
