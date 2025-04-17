@@ -31,6 +31,29 @@ def set_background(image_path):
     )
 set_background("image/background.jpg")  # ← 你的背景圖放這邊
 
+st.markdown("""
+<style>
+/* ✅ 全站文字白色與字型 */
+html, body, .stApp {
+    color: #ffffff;
+    font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", sans-serif;
+}
+
+/* ✅ 強調標題項目：加粗 */
+h1, h2, h3, h4 {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.card-label {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1VbqOaRt3lWAEJjg-QdGABBT2XdC6B_2ZuIsqrASGmio/export?format=csv&gid=0"
 
