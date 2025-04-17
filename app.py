@@ -122,15 +122,23 @@ for i, (_, row) in enumerate(df.iterrows()):
             st.warning(f"❗ 找不到圖片：{row['名稱']}.jpg/.JPG/.png")
 
         # ✅ 顯示裝備資料
-        st.markdown(f"#### {row['名稱']}")
-        st.markdown(f"📦 分類：{row['分類']}")
-        st.markdown(f"💰 每日租金：${int(row['每日租金']) if pd.notna(row['每日租金']) else '—'}")
-        st.markdown(f"💥 損壞賠償價：${int(row['原價']) if pd.notna(row['原價']) else '—'}")
+        st.markdown(f"<h4 style='margin-bottom: 10px'>{row['名稱']}</h4>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight: bold;'>📦 分類：</div>{row['分類']}", unsafe_allow_html=True)
+        if pd.notna(row['每日租金']):
+            st.markdown(f"<div style='font-weight: bold;'>💰 每日租金：</div>${int(row['每日租金'])}", unsafe_allow_html=True)
+        else:
+            st.markdown(f"<div style='font-weight: bold;'>💰 每日租金：</div>—", unsafe_allow_html=True)
+
+        if pd.notna(row['原價']):
+            st.markdown(f"<div style='font-weight: bold;'>💥 損壞賠償價：</div>${int(row['原價'])}", unsafe_allow_html=True)
+        else:
+            st.markdown(f"<div style='font-weight: bold;'>💥 損壞賠償價：</div>—", unsafe_allow_html=True)
 
         尺寸 = row['尺寸'] if '尺寸' in row and pd.notna(row['尺寸']) else "—"
-        st.markdown(f"📏 尺寸：{尺寸}")
+        st.markdown(f"<div style='font-weight: bold;'>📏 尺寸：</div>{尺寸}", unsafe_allow_html=True)
 
-        st.markdown(f"🔹 內容物：{row['內容物']}")
+        st.markdown(f"<div style='font-weight: bold;'>🔹 內容物：</div>{row['內容物']}", unsafe_allow_html=True)
+
 
         # 👉 每張卡片結尾
         st.markdown('</div>', unsafe_allow_html=True)
