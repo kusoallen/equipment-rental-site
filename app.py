@@ -145,13 +145,13 @@ for i, (_, row) in enumerate(df.iterrows()):
 
 
 
-st.subheader("📝 我要預約租借")
+#st.subheader("📝 我要預約租借")
 
-with st.form("rental_form"):
-    name = st.text_input("👤 你的名字")
-    item = st.selectbox("📦 想租借的裝備", df["名稱"].unique())
-    days = st.number_input("📆 租借天數", min_value=1, value=1)
-    submit = st.form_submit_button("送出預約")
+#with st.form("rental_form"):
+    #name = st.text_input("👤 你的名字")
+    #item = st.selectbox("📦 想租借的裝備", df["名稱"].unique())
+    #days = st.number_input("📆 租借天數", min_value=1, value=1)
+    #submit = st.form_submit_button("送出預約")
 
-    if submit:
-        st.success(f"感謝你，{name}！你已預約【{item}】，租借 {days} 天。後續會與你聯繫！")
+    #if submit:
+        #st.success(f"感謝你，{name}！你已預約【{item}】，租借 {days} 天。後續會與你聯繫！")
